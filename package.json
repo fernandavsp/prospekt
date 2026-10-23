@@ -1,0 +1,8 @@
+{
+  "name": "prospekt",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Prospector de Leads com autenticação, quota e Google Places protegido no backend",
+  "engines": { "node": ">=20" },
+  "dependencies": { "@supabase/supabase-js": "^2.57.0" }
+}
