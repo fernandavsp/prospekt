@@ -3,551 +3,177 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Prospekt</title>
+<title>Prospekt - Entrar</title>
 <style>
   :root {
-    --bg: #f6f7f9; --card: #ffffff; --text: #1b1f27; --muted: #6b7280;
-    --line: #e5e7eb; --accent: #4f46e5; --accent-2: #4338ca; --ok: #16a34a; --warn: #d97706; --bad: #dc2626;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root { --bg: #0f1115; --card: #181b22; --text: #e8eaef; --muted: #9aa3b2; --line: #2a2f3a; --accent: #818cf8; --accent-2: #6366f1; }
+    color-scheme: light;
+    --text: #18233b; --muted: #75809a; --line: #e2e6f1;
+    --accent: #5b4ce2; --accent-2: #4535c6; --bad: #c33f4b; --ok: #159b72;
   }
   * { box-sizing: border-box; }
-  body { margin: 0; font: 15px/1.5 system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background: var(--bg); color: var(--text); }
-  header { padding: 20px 16px 8px; max-width: 1100px; margin: 0 auto; }
-  h1 { margin: 0; font-size: 22px; }
-  header p { margin: 4px 0 0; color: var(--muted); font-size: 14px; }
-  main { max-width: 1100px; margin: 0 auto; padding: 8px 16px 48px; }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-top: 14px; }
-  .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: end; }
-  label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); flex: 1 1 180px; }
-  label.inline { flex-direction: row; align-items: center; gap: 8px; flex: 0 0 auto; color: var(--text); }
-  input[type=text], input[type=password], input[type=number], select, textarea {
-    font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 9px 10px; width: 100%;
+  html, body { height: 100%; }
+  body {
+    margin: 0; color: var(--text); background: #f6f7fc;
+    font: 15px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    letter-spacing: -.01em;
   }
-  textarea { resize: vertical; min-height: 60px; }
-  button { font: inherit; cursor: pointer; border-radius: 8px; border: 1px solid var(--line); background: var(--card); color: var(--text); padding: 9px 14px; }
-  button:hover { border-color: var(--accent); }
-  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
-  button.primary:hover { background: var(--accent-2); }
-  button:disabled { opacity: .5; cursor: not-allowed; }
-  button.small { padding: 5px 10px; font-size: 13px; }
-  .tabs { display: flex; gap: 6px; margin-top: 18px; border-bottom: 1px solid var(--line); }
-  .tab { border: none; border-bottom: 2px solid transparent; border-radius: 0; background: none; padding: 10px 14px; color: var(--muted); }
-  .tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
-  .hidden { display: none !important; }
-  .msg { margin-top: 12px; font-size: 14px; color: var(--muted); }
+  .split { display: grid; grid-template-columns: 1.1fr 1fr; min-height: 100vh; }
+
+  /* ---------- painel da marca ---------- */
+  .brand-panel {
+    position: relative; overflow: hidden; color: #fff;
+    background: linear-gradient(135deg, #171b38 0%, #252052 52%, #4439a1 100%);
+    padding: 28px 28px 32px; display: flex; flex-direction: column;
+  }
+  .brand-panel:before {
+    content: ""; position: absolute; width: 520px; height: 520px; right: -120px; top: -140px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(140,124,255,.38), transparent 68%); pointer-events: none;
+  }
+  .brand-panel:after {
+    content: ""; position: absolute; width: 420px; height: 420px; right: -150px; bottom: -170px; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,.1); box-shadow: 0 0 0 46px rgba(255,255,255,.025), 0 0 0 92px rgba(255,255,255,.02); pointer-events: none;
+  }
+  .brand { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 12px; color: #fff; text-decoration: none; width: max-content; }
+  .brand-mark { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 15px; background: linear-gradient(135deg, #a69bff, #7666f3); box-shadow: 0 8px 22px rgba(8,5,43,.3); }
+  .brand-mark svg { width: 32px; height: 32px; }
+  .brand-name { font-size: 26px; font-weight: 800; letter-spacing: -1px; }
+  .brand-name span { color: #a69bff; }
+  .brand-body { position: relative; z-index: 1; margin: auto 0; padding: 40px 0; max-width: 640px; }
+  .eyebrow { font-size: 12px; font-weight: 800; letter-spacing: 2px; color: #c3bdff; }
+  .brand-body h1 { margin: 18px 0 16px; font-size: clamp(38px, 5vw, 68px); line-height: 1.04; letter-spacing: -2.5px; font-weight: 800; }
+  .brand-body h1 span { color: #aaa1ff; }
+  .brand-body p { margin: 0; max-width: 520px; color: #d0d2e8; font-size: 17px; line-height: 1.75; }
+  .checks { list-style: none; padding: 0; margin: 34px 0 0; display: grid; gap: 14px; }
+  .checks li { display: flex; align-items: center; gap: 14px; color: #e4e5f4; font-size: 16px; }
+  .checks i { flex: none; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 10px; background: rgba(255,255,255,.1); color: #5de0ae; font-style: normal; font-weight: 800; }
+  .brand-foot { position: relative; z-index: 1; color: #b9bbd6; font-size: 14px; }
+
+  /* ---------- painel do formulário ---------- */
+  .form-panel { display: grid; place-items: center; padding: 36px 24px; background: radial-gradient(ellipse at 80% 0%, rgba(103,86,232,.07), transparent 40%), #f6f7fc; }
+  .login-card { width: 100%; max-width: 520px; background: #fff; border: 1px solid #e8ebf4; border-radius: 26px; padding: 48px 50px 40px; box-shadow: 0 18px 50px rgba(29,37,76,.08); }
+  .login-card h2 { margin: 0 0 10px; font-size: 34px; letter-spacing: -1.2px; font-weight: 800; }
+  .sub { margin: 0 0 30px; color: var(--muted); font-size: 16px; }
+  label { display: block; margin-bottom: 18px; font-size: 13px; font-weight: 700; color: #4f5a75; }
+  input {
+    display: block; width: 100%; margin-top: 9px; font: inherit; font-weight: 500; color: var(--text);
+    border: 1px solid #dfe4ef; background: #fbfcff; border-radius: 12px; padding: 16px 18px; outline: none;
+    transition: border-color .18s, box-shadow .18s, background .18s;
+  }
+  input::placeholder { color: #7d879d; font-weight: 600; }
+  input:focus { border-color: #8a7df1; background: #fff; box-shadow: 0 0 0 3px rgba(91,76,226,.13); }
+  .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 4px; }
+  button { font: inherit; font-weight: 700; cursor: pointer; border-radius: 12px; border: 1px solid #e0e4ef; background: #fff; color: #34405c; padding: 16px 18px; transition: transform .15s, box-shadow .15s, background .15s, border-color .15s; }
+  button:hover:not(:disabled) { border-color: #a69cf5; box-shadow: 0 5px 14px rgba(46,39,122,.1); transform: translateY(-1px); }
+  button.primary { background: linear-gradient(135deg, #6557e8, #4f40ce); border-color: #5a4cdb; color: #fff; box-shadow: 0 7px 18px rgba(91,76,226,.28); }
+  button.primary:hover:not(:disabled) { background: linear-gradient(135deg, #5546d8, #4132b7); }
+  button:disabled { opacity: .55; cursor: not-allowed; }
+  .divider { display: flex; align-items: center; gap: 14px; margin: 26px 0 20px; color: var(--muted); font-size: 13px; }
+  .divider:before, .divider:after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  .google { width: 100%; display: flex; align-items: center; justify-content: center; gap: 12px; }
+  .msg { min-height: 22px; margin-top: 20px; font-size: 14px; line-height: 1.55; color: var(--muted); }
   .msg.err { color: var(--bad); }
-  .lead { display: grid; grid-template-columns: 1fr auto; gap: 8px 14px; padding: 14px 0; border-bottom: 1px solid var(--line); }
-  .lead:last-child { border-bottom: none; }
-  .lead h3 { margin: 0; font-size: 16px; }
-  .meta { color: var(--muted); font-size: 13px; }
-  .badges { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
-  .badge { font-size: 12px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
-  .badge.nosite { color: var(--ok); border-color: var(--ok); font-weight: 600; }
-  .badge.hassite { color: var(--muted); }
-  .actions { display: flex; gap: 6px; flex-wrap: wrap; align-items: flex-start; justify-content: flex-end; }
-  .lead-extra { grid-column: 1 / -1; display: grid; grid-template-columns: 180px 1fr; gap: 10px; }
-  a { color: var(--accent); }
-  .stats { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
-  .stat { font-size: 13px; padding: 4px 10px; border-radius: 8px; background: var(--bg); border: 1px solid var(--line); }
-  details summary { cursor: pointer; font-weight: 600; }
-  .hint { font-size: 12px; color: var(--muted); margin-top: 6px; }
-  @media (max-width: 640px) {
-    .lead { grid-template-columns: 1fr; }
-    .actions { justify-content: flex-start; }
-    .lead-extra { grid-template-columns: 1fr; }
-  }
+  .legal { margin: 18px 0 0; text-align: center; font-size: 13px; color: #8a93a8; }
 
-  /* Visual refresh: modern SaaS dashboard */
-  :root { color-scheme: light; --bg:#f5f7fc; --card:#ffffff; --text:#18233b; --muted:#75809a; --line:#e6eaf3; --accent:#5b4ce2; --accent-2:#4535c6; --ok:#159b72; --warn:#b7791f; --bad:#d14343; }
-  body { background: radial-gradient(ellipse at 80% 0%, rgba(103,86,232,.10), transparent 35%), var(--bg); color:var(--text); font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing:-.01em; }
-  .app-header { max-width:none; padding:0; margin:0; background:linear-gradient(115deg,#171b38 0%,#252052 58%,#4439a1 100%); color:#fff; position:relative; overflow:hidden; }
-  .app-header:after { content:""; position:absolute; width:390px; height:390px; right:5%; top:-245px; border:1px solid rgba(255,255,255,.12); border-radius:50%; box-shadow:0 0 0 45px rgba(255,255,255,.025),0 0 0 90px rgba(255,255,255,.025); pointer-events:none; }
-  .topbar { position:relative; z-index:1; max-width:1180px; margin:auto; padding:22px 24px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,.12); }
-  .brand { display:inline-flex; align-items:center; gap:10px; color:#fff; text-decoration:none; }
-  .brand-mark { display:grid; place-items:center; width:38px; height:38px; border-radius:12px; background:linear-gradient(135deg,#a69bff,#7666f3); color:#fff; box-shadow:0 6px 18px rgba(8,5,43,.25); }
-  .brand-mark svg { width:26px; height:26px; }
-  .brand-name { font-size:20px; font-weight:800; letter-spacing:-.8px; }
-  .brand-name span { color:#a69bff; }
-  .topbar-right { display:flex; align-items:center; gap:14px; }
-  .secure-pill { display:inline-flex; align-items:center; gap:7px; padding:7px 11px; border:1px solid rgba(255,255,255,.2); border-radius:999px; color:#e1e3ff; font-size:12px; }
-  .secure-pill span { width:7px; height:7px; border-radius:50%; background:#5de0ae; box-shadow:0 0 0 3px rgba(93,224,174,.13); }
-  .app-header #btnLogout { color:#fff; background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.2); }
-  .hero-copy { position:relative; z-index:1; max-width:1180px; margin:auto; padding:34px 24px 54px; }
-  .eyebrow { display:flex; align-items:center; gap:8px; color:#c3bdff; font-size:11px; font-weight:800; letter-spacing:1.5px; }
-  .eyebrow-dot { width:7px; height:7px; background:#a69bff; border-radius:50%; }
-  .hero-copy h1 { margin:12px 0 9px; font-size:clamp(29px,4vw,42px); line-height:1.12; letter-spacing:-1.5px; font-weight:800; }
-  .hero-copy h1 span { color:#aaa1ff; }
-  .hero-copy p { margin:0; max-width:590px; color:#c7c9df; font-size:15px; line-height:1.7; }
-  main { max-width:1180px; margin:-20px auto 0; padding:0 24px 56px; position:relative; z-index:2; }
-  .card { background:var(--card); border:1px solid #e8ebf4; border-radius:17px; padding:22px; margin-top:16px; box-shadow:0 8px 28px rgba(29,37,76,.045); }
-  #accountCard { border-color:#e3e0ff; box-shadow:0 12px 32px rgba(52,43,130,.09); }
-  #accountTitle { font-size:16px; letter-spacing:-.25px; }
-  .hint { color:var(--muted); line-height:1.6; }
-  label { color:#66718b; font-size:12px; font-weight:650; gap:7px; }
-  input[type=text], input[type=email], input[type=password], input[type=number], select, textarea { border:1px solid #dfe4ef; background:#fbfcff; color:var(--text); border-radius:10px; padding:11px 12px; outline:none; transition:border-color .18s,box-shadow .18s,background .18s; }
-  input:focus, select:focus, textarea:focus { border-color:#8a7df1; background:#fff; box-shadow:0 0 0 3px rgba(91,76,226,.12); }
-  input[type=checkbox] { accent-color:var(--accent); width:16px; height:16px; }
-  button { border:1px solid #e0e4ef; background:#fff; color:#34405c; border-radius:10px; padding:10px 15px; font-weight:650; transition:transform .15s,box-shadow .15s,background .15s,border-color .15s; }
-  button:hover { border-color:#a69cf5; box-shadow:0 4px 12px rgba(46,39,122,.08); transform:translateY(-1px); }
-  button.primary { background:linear-gradient(135deg,#6557e8,#4f40ce); border-color:#5a4cdb; color:white; box-shadow:0 5px 13px rgba(91,76,226,.2); }
-  button.primary:hover { background:linear-gradient(135deg,#5546d8,#4132b7); }
-  button:disabled { transform:none; box-shadow:none; }
-  #btnGoogle { background:#fff; border-color:#dfe4ef !important; color:#26324a; min-height:44px; }
-  #btnGoogle:hover { background:#fafaff; }
-  #quotaCard { background:linear-gradient(115deg,#f1efff,#faf9ff); border-color:#dfdafe; }
-  #quotaCard strong { color:#4c40b8; }
-  .stat { background:#f7f8fd; border-color:#e7eaf4; color:#515e79; padding:7px 11px; border-radius:9px; }
-  .tabs { gap:7px; margin-top:23px; border-bottom:1px solid #e2e6f0; }
-  .tab { padding:12px 16px; font-size:14px; border-bottom-width:3px; }
-  .tab.active { color:#5143d1; border-bottom-color:#6557e8; }
-  #tab-results, #tab-saved { min-height:190px; }
-  .lead { padding:18px 2px; gap:10px 16px; }
-  .lead h3 { font-size:16px; font-weight:750; letter-spacing:-.25px; }
-  .meta { color:#7a849b; line-height:1.7; }
-  .badge { background:#f8f9fd; border-color:#e4e8f1; padding:4px 9px; }
-  .badge.nosite { color:#0f8b65; background:#eafaf3; border-color:#c8f0df; }
-  .badge.hassite { color:#67728b; }
-  a { color:#5b4ce2; font-weight:600; text-decoration:none; }
-  a:hover { text-decoration:underline; }
-  details summary { color:#34405c; list-style:none; display:flex; justify-content:space-between; align-items:center; }
-  details summary::-webkit-details-marker { display:none; }
-  details summary:after { content:"＋"; color:#6557e8; font-size:18px; }
-  details[open] summary:after { content:"−"; }
-  .msg { line-height:1.6; }
-  .msg.err { color:#c33f4b; }
-  @media (max-width:640px) {
-    .topbar { padding:16px; }
-    .secure-pill { display:none; }
-    .hero-copy { padding:28px 18px 42px; }
-    .hero-copy h1 { letter-spacing:-1px; }
-    main { padding:0 13px 36px; margin-top:-14px; }
-    .card { padding:17px; border-radius:14px; }
-    .row { gap:12px; }
-    .tab { padding:11px 10px; }
+  /* ---------- celular / tablet ---------- */
+  @media (max-width: 900px) {
+    .split { grid-template-columns: 1fr; }
+    .brand-panel { padding: 22px 20px 26px; }
+    .brand-body { padding: 26px 0 0; margin: 0; }
+    .brand-body h1 { font-size: 34px; letter-spacing: -1.4px; margin: 12px 0 10px; }
+    .brand-body p { font-size: 15px; }
+    .checks, .brand-foot { display: none; }
+    .brand-mark { width: 42px; height: 42px; border-radius: 12px; }
+    .brand-mark svg { width: 26px; height: 26px; }
+    .brand-name { font-size: 22px; }
+    .form-panel { padding: 22px 14px 36px; }
+    .login-card { padding: 30px 22px 26px; border-radius: 22px; margin-top: -4px; }
+    .login-card h2 { font-size: 28px; }
   }
-
+  @media (max-width: 420px) { .btn-row { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
-<header class="app-header">
-  <div class="topbar">
-    <a class="brand" href="#" aria-label="Prospekt - início">
-      <span class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M14 5a9 9 0 1 0 5.8 15.9L26 27l2-2-6.1-6.2A9 9 0 0 0 14 5Zm0 3a6 6 0 1 1 0 12 6 6 0 0 1 0-12Z" fill="currentColor"/><path d="m11 14 2 2 4-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+<div class="split">
+
+  <aside class="brand-panel">
+    <a class="brand" href="/" aria-label="Prospekt - início">
+      <span class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M14 5a9 9 0 1 0 5.8 15.9L26 27l2-2-6.1-6.2A9 9 0 0 0 14 5Zm0 3a6 6 0 1 1 0 12 6 6 0 0 1 0-12Z" fill="#fff"/><path d="m11 14 2 2 4-5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       <span class="brand-name">prospekt<span>.</span></span>
     </a>
-    <div class="topbar-right"><span class="secure-pill"><span></span> Ambiente seguro</span><button id="btnLogout" class="hidden">Sair</button></div>
-  </div>
-  <div class="hero-copy">
-    <div class="eyebrow"><span class="eyebrow-dot"></span> PROSPECÇÃO INTELIGENTE</div>
-    <h1>Encontre seu próximo <span>cliente.</span></h1>
-    <p>Descubra negócios locais, encontre oportunidades e organize seus contatos em um só lugar.</p>
-  </div>
-</header>
-
-<main>
-  <section class="card" id="accountCard">
-    <div class="row" style="align-items:center;justify-content:space-between">
-      <div><strong id="accountTitle">Acesso ao Prospekt</strong><div class="hint" id="accountInfo">Entre ou crie sua conta para pesquisar.</div></div>
+    <div class="brand-body">
+      <div class="eyebrow">PROSPECÇÃO INTELIGENTE</div>
+      <h1>Encontre seu próximo <span>cliente.</span></h1>
+      <p>Descubra empresas com potencial, organize seus contatos e transforme oportunidades em novos negócios.</p>
+      <ul class="checks">
+        <li><i>✓</i> Pesquise negócios por segmento e região</li>
+        <li><i>✓</i> Organize e acompanhe seus leads</li>
+        <li><i>✓</i> Comece com pesquisas gratuitas</li>
+      </ul>
     </div>
-    <div id="authPanel" style="margin-top:12px">
-      <div class="row">
-        <label>E-mail<input type="email" id="authEmail" autocomplete="email" placeholder="voce@exemplo.com"></label>
-        <label>Senha<input type="password" id="authPassword" autocomplete="current-password" minlength="8" placeholder="Mínimo de 8 caracteres"></label>
-      </div>
-      <div class="row" style="margin-top:10px"><button class="primary" id="btnLogin">Entrar</button><button id="btnSignup">Criar conta</button></div>
-      <div style="display:flex;align-items:center;gap:12px;margin:16px 0;color:var(--muted);font-size:12px"><span style="height:1px;background:var(--line);flex:1"></span><span>ou continue com</span><span style="height:1px;background:var(--line);flex:1"></span></div>
-      <button id="btnGoogle" type="button" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;font-weight:600"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.04 13.22l7.98 6.19C11.93 13.72 17.47 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.74 7.18l7.73 6C44.43 37.98 46.98 31.84 46.98 24.55z"/><path fill="#FBBC05" d="M10.02 28.59A14.4 14.4 0 0 1 9.25 24c0-1.59.27-3.13.76-4.59l-7.98-6.19A23.9 23.9 0 0 0 0 24c0 3.87.93 7.52 2.58 10.78l7.44-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.9-5.8l-7.73-6c-2.14 1.43-4.88 2.28-8.17 2.28-6.53 0-12.07-4.22-14.04-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>Entrar com Google</button>
+    <div class="brand-foot">Sua próxima oportunidade pode começar aqui.</div>
+  </aside>
+
+  <main class="form-panel">
+    <section class="login-card">
+      <h2>Boas-vindas!</h2>
+      <p class="sub">Entre na sua conta para acessar a ferramenta.</p>
+
+      <form id="authForm" novalidate>
+        <label>E-mail
+          <input type="email" id="authEmail" autocomplete="email" placeholder="voce@empresa.com">
+        </label>
+        <label>Senha
+          <input type="password" id="authPassword" autocomplete="current-password" minlength="8" placeholder="Mínimo de 8 caracteres">
+        </label>
+        <div class="btn-row">
+          <button class="primary" id="btnLogin" type="submit">Entrar</button>
+          <button id="btnSignup" type="button">Criar conta</button>
+        </div>
+      </form>
+
+      <div class="divider">ou continue com</div>
+      <button id="btnGoogle" class="google" type="button"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.04 13.22l7.98 6.19C11.93 13.72 17.47 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.74 7.18l7.73 6C44.43 37.98 46.98 31.84 46.98 24.55z"/><path fill="#FBBC05" d="M10.02 28.59A14.4 14.4 0 0 1 9.25 24c0-1.59.27-3.13.76-4.59l-7.98-6.19A23.9 23.9 0 0 0 0 24c0 3.87.93 7.52 2.58 10.78l7.44-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.9-5.8l-7.73-6c-2.14 1.43-4.88 2.28-8.17 2.28-6.53 0-12.07-4.22-14.04-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>Entrar com Google</button>
+
       <div class="msg" id="authMsg" role="status" aria-live="polite"></div>
-    </div>
-  </section>
-  <details class="card" id="cfg">
-    <summary>Configuração de mensagem</summary>
-    <label style="margin-top:12px">Mensagem padrão de abordagem (use {nome} para o nome da empresa)
-      <textarea id="tpl"></textarea>
-    </label>
-  </details>
-  <section class="card hidden" id="quotaCard"><strong>Seu plano</strong><div class="stats"><span class="stat" id="quotaInfo">Consultas gratuitas disponíveis: —</span></div><p class="hint">A versão inicial permite até 5 pesquisas gratuitas por conta. O limite é validado no servidor.</p></section>
+      <p class="legal">Ao continuar, você acessará sua área segura de prospecção.</p>
+    </section>
+  </main>
 
-  <section class="card">
-    <div class="row">
-      <label>Segmento
-        <input type="text" id="segment" placeholder="ex.: salão de beleza, barbearia, pet shop">
-      </label>
-      <label>Cidade / bairro
-        <input type="text" id="city" placeholder="ex.: Duque de Caxias, RJ">
-      </label>
-      <label style="flex:0 1 130px">Páginas (20 por página)
-        <select id="pages"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select>
-      </label>
-    </div>
-    <div class="row" style="margin-top:12px">
-      <label class="inline"><input type="checkbox" id="onlyNoSite" checked> Só empresas sem site</label>
-      <label class="inline">Mín. de avaliações <input type="number" id="minReviews" value="0" min="0" style="width:80px"></label>
-      <label class="inline"><input type="checkbox" id="onlyPhone" checked> Só com telefone</label>
-      <button class="primary" id="btnSearch">Buscar</button>
-    </div>
-    <div class="msg" id="searchMsg"></div>
-  </section>
-
-  <div class="tabs">
-    <button class="tab active" data-tab="results">Resultados <span id="cntResults"></span></button>
-    <button class="tab" data-tab="saved">Meus leads <span id="cntSaved"></span></button>
-  </div>
-
-  <section class="card" id="tab-results"><div class="msg">Faça uma busca para ver os resultados.</div></section>
-
-  <section class="card hidden" id="tab-saved">
-    <div class="row" style="justify-content:space-between;align-items:center">
-      <div class="stats" id="stats"></div>
-      <div class="row" style="align-items:center">
-        <select id="filterStatus" style="width:auto"></select>
-        <button id="btnCsv">Exportar CSV</button>
-      </div>
-    </div>
-    <div id="savedList"></div>
-  </section>
-</main>
+</div>
 
 <script src="/config.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.0/dist/umd/supabase.js"></script>
 <script>
 (function () {
   'use strict';
-
-  var STATUSES = [
-    ['novo', 'Novo'], ['contatado', 'Contatado'], ['respondeu', 'Respondeu'],
-    ['proposta', 'Proposta enviada'], ['fechado', 'Fechado'], ['descartado', 'Descartado']
-  ];
-  var DEFAULT_TPL = 'Olá! Tudo bem? Vi o {nome} no Google e notei que ainda não tem um site. Eu crio páginas simples e profissionais para negócios locais, para atrair mais clientes pelo Google e WhatsApp. Posso te mostrar um exemplo sem compromisso?';
-
+  var APP_URL = '/app.html';
   var $ = function (id) { return document.getElementById(id); };
-  function load(key, fallback) {
-    try { var v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; } catch (e) { return fallback; }
-  }
-  function save(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {} }
-
-  var leads = load('pl_leads', {});      // id -> lead
-  var results = [];                       // resultados da busca atual (brutos, já normalizados)
-  var lastQuery = null, nextToken = null, lastSegment = '';
-
-  // ---------- util ----------
-  function el(tag, props, children) {
-    var n = document.createElement(tag);
-    if (props) Object.keys(props).forEach(function (k) {
-      if (k === 'text') n.textContent = props[k];
-      else if (k === 'class') n.className = props[k];
-      else if (k.indexOf('on') === 0) n.addEventListener(k.slice(2), props[k]);
-      else n.setAttribute(k, props[k]);
-    });
-    (children || []).forEach(function (c) { if (c) n.appendChild(c); });
-    return n;
-  }
-  function digits(s) { return (s || '').replace(/\D/g, ''); }
-  function waNumber(phone) {
-    var d = digits(phone);
-    if (d.indexOf('55') === 0 && d.length >= 12) return d;
-    if (d.length === 11 && d.charAt(2) === '9') return '55' + d; // celular com DDD
-    return null; // fixo ou formato desconhecido
-  }
-  function waLink(lead) {
-    var n = waNumber(lead.phone);
-    if (!n) return null;
-    var tpl = ($('tpl').value || DEFAULT_TPL).replace(/\{nome\}/g, lead.name);
-    return 'https://wa.me/' + n + '?text=' + encodeURIComponent(tpl);
-  }
-  function setMsg(text, isErr) {
-    var m = $('searchMsg'); m.textContent = text || ''; m.className = 'msg' + (isErr ? ' err' : '');
-  }
-
-  // ---------- config ----------
-  $('tpl').value = load('pl_tpl', DEFAULT_TPL);
-  $('tpl').addEventListener('change', function () { save('pl_tpl', $('tpl').value); });
-
-  // ---------- busca ----------
-  var FIELDS = [
-    'places.id', 'places.displayName', 'places.formattedAddress', 'places.nationalPhoneNumber',
-    'places.websiteUri', 'places.rating', 'places.userRatingCount', 'places.googleMapsUri',
-    'places.businessStatus', 'nextPageToken'
-  ].join(',');
-
-  function normalize(p) {
-    return {
-      id: p.id,
-      name: (p.displayName && p.displayName.text) || 'Sem nome',
-      address: p.formattedAddress || '',
-      phone: p.nationalPhoneNumber || '',
-      website: p.websiteUri || '',
-      rating: p.rating || null,
-      reviews: p.userRatingCount || 0,
-      maps: p.googleMapsUri || '',
-      status: p.businessStatus || ''
-    };
-  }
-
-  async function fetchPage(query, token) {
-    var session = (await supabase.auth.getSession()).data.session;
-    if (!session) throw new Error('Entre na sua conta para pesquisar.');
-    var res = await fetch('/api/places-search', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
-      body: JSON.stringify({ textQuery: query, pageToken: token || null })
-    });
-    var data = await res.json().catch(function () { return {}; });
-    if (!res.ok) {
-      if (data.remaining !== undefined) updateQuota(data.remaining, data.limit || 5);
-      throw new Error(data.error || ('Erro ' + res.status));
-    }
-    if (data.remaining !== undefined) updateQuota(data.remaining, data.limit || 5);
-    return data;
-  }
-
-  async function doSearch(more) {
-    if (!currentSession) { setMsg('Entre na sua conta para pesquisar.', true); return; }
-    var seg = $('segment').value.trim(), city = $('city').value.trim();
-    if (!seg || !city) { setMsg('Preencha segmento e cidade.', true); return; }
-
-    var query = seg + ' em ' + city;
-    var pages = parseInt($('pages').value, 10) || 1;
-    var btn = $('btnSearch'); btn.disabled = true; setMsg('Buscando...');
-    try {
-      if (!more) { results = []; nextToken = null; lastQuery = query; lastSegment = seg; }
-      var token = more ? nextToken : null;
-      for (var i = 0; i < (more ? 1 : pages); i++) {
-        var data = await fetchPage(lastQuery, token);
-        (data.places || []).forEach(function (p) {
-          var n = normalize(p);
-          n.segment = lastSegment;
-          if (!results.some(function (r) { return r.id === n.id; })) results.push(n);
-        });
-        token = data.nextPageToken || null;
-        if (!token) break;
-      }
-      nextToken = token;
-      setMsg('');
-      renderResults();
-    } catch (e) {
-      setMsg('Não foi possível buscar: ' + e.message, true);
-    } finally {
-      btn.disabled = false;
-    }
-  }
-
-  function passesFilters(r) {
-    if (r.status === 'CLOSED_PERMANENTLY') return false;
-    if ($('onlyNoSite').checked && r.website) return false;
-    if ($('onlyPhone').checked && !r.phone) return false;
-    if (r.reviews < (parseInt($('minReviews').value, 10) || 0)) return false;
-    return true;
-  }
-
-  // ---------- render: resultados ----------
-  function leadHeader(r, extraBadges) {
-    var badges = el('div', { class: 'badges' }, [
-      el('span', { class: 'badge ' + (r.website ? 'hassite' : 'nosite'), text: r.website ? 'Tem site' : 'Sem site' }),
-      r.rating ? el('span', { class: 'badge', text: '★ ' + r.rating + ' (' + r.reviews + ')' }) : null
-    ].concat(extraBadges || []));
-    return el('div', {}, [
-      el('h3', { text: r.name }),
-      el('div', { class: 'meta', text: r.address }),
-      el('div', { class: 'meta', text: r.phone || 'Sem telefone' }),
-      badges
-    ]);
-  }
-
-  function contactButtons(r) {
-    var out = [];
-    var wa = waLink(r);
-    if (wa) out.push(el('a', { href: wa, target: '_blank', rel: 'noopener' }, [el('button', { class: 'small', text: 'WhatsApp' })]));
-    else if (r.phone) out.push(el('a', { href: 'tel:' + digits(r.phone) }, [el('button', { class: 'small', text: 'Ligar' })]));
-    if (r.maps) out.push(el('a', { href: r.maps, target: '_blank', rel: 'noopener' }, [el('button', { class: 'small', text: 'Maps' })]));
-    if (r.website) out.push(el('a', { href: r.website, target: '_blank', rel: 'noopener' }, [el('button', { class: 'small', text: 'Site' })]));
-    return out;
-  }
-
-  function renderResults() {
-    var box = $('tab-results'); box.textContent = '';
-    var shown = results.filter(passesFilters);
-    $('cntResults').textContent = results.length ? '(' + shown.length + ')' : '';
-    if (!results.length) { box.appendChild(el('div', { class: 'msg', text: 'Nenhum resultado para essa busca.' })); return; }
-    box.appendChild(el('div', { class: 'meta', text: shown.length + ' de ' + results.length + ' resultados após os filtros.' }));
-    shown.forEach(function (r) {
-      var isSaved = !!leads[r.id];
-      var saveBtn = el('button', {
-        class: 'small primary', text: isSaved ? 'Salvo ✓' : 'Salvar lead',
-        onclick: function () {
-          if (leads[r.id]) return;
-          leads[r.id] = Object.assign({}, r, { pipeline: 'novo', notes: '', savedAt: new Date().toISOString() });
-          persistLead(leads[r.id]); renderResults(); renderSaved();
-        }
-      });
-      if (isSaved) saveBtn.disabled = true;
-      box.appendChild(el('div', { class: 'lead' }, [
-        leadHeader(r),
-        el('div', { class: 'actions' }, contactButtons(r).concat([saveBtn]))
-      ]));
-    });
-    if (nextToken) {
-      box.appendChild(el('div', { style: 'margin-top:12px' }, [
-        el('button', { text: 'Carregar mais 20', onclick: function () { doSearch(true); } })
-      ]));
-    }
-  }
-
-  // ---------- render: leads salvos ----------
-  function fillStatusFilter() {
-    var s = $('filterStatus'); s.textContent = '';
-    s.appendChild(el('option', { value: '', text: 'Todos os status' }));
-    STATUSES.forEach(function (st) { s.appendChild(el('option', { value: st[0], text: st[1] })); });
-  }
-
-  function renderSaved() {
-    var list = $('savedList'); list.textContent = '';
-    var all = Object.keys(leads).map(function (k) { return leads[k]; })
-      .sort(function (a, b) { return b.savedAt < a.savedAt ? -1 : 1; });
-    $('cntSaved').textContent = all.length ? '(' + all.length + ')' : '';
-
-    var stats = $('stats'); stats.textContent = '';
-    STATUSES.forEach(function (st) {
-      var n = all.filter(function (l) { return l.pipeline === st[0]; }).length;
-      if (n) stats.appendChild(el('span', { class: 'stat', text: st[1] + ': ' + n }));
-    });
-
-    var f = $('filterStatus').value;
-    var shown = f ? all.filter(function (l) { return l.pipeline === f; }) : all;
-    if (!shown.length) { list.appendChild(el('div', { class: 'msg', text: all.length ? 'Nenhum lead com esse status.' : 'Nenhum lead salvo ainda.' })); return; }
-
-    shown.forEach(function (l) {
-      var sel = el('select', { onchange: function () { l.pipeline = sel.value; save('pl_leads', leads); persistLead(l); renderSaved(); } });
-      STATUSES.forEach(function (st) {
-        var o = el('option', { value: st[0], text: st[1] }); if (st[0] === l.pipeline) o.selected = true; sel.appendChild(o);
-      });
-      var notes = el('textarea', { placeholder: 'Anotações (o que combinou, próxima ação...)' });
-      notes.value = l.notes || '';
-      notes.addEventListener('change', function () { l.notes = notes.value; save('pl_leads', leads); persistLead(l); });
-      var del = el('button', {
-        class: 'small', text: 'Remover',
-        onclick: function () { if (confirm('Remover "' + l.name + '" dos seus leads?')) { delete leads[l.id]; save('pl_leads', leads); removeLeadFromCloud(l.id); renderSaved(); renderResults(); } }
-      });
-      var row = el('div', { class: 'lead' }, [
-        leadHeader(l),
-        el('div', { class: 'actions' }, contactButtons(l).concat([del])),
-        el('div', { class: 'lead-extra' }, [sel, notes])
-      ]);
-      list.appendChild(row);
-    });
-  }
-
-  // ---------- CSV ----------
-  function csvCell(v) { return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"'; }
-  $('btnCsv').addEventListener('click', function () {
-    var all = Object.keys(leads).map(function (k) { return leads[k]; });
-    if (!all.length) { alert('Nenhum lead para exportar.'); return; }
-    var labels = {}; STATUSES.forEach(function (s) { labels[s[0]] = s[1]; });
-    var head = ['Nome', 'Telefone', 'Endereço', 'Site', 'Nota', 'Avaliações', 'Status', 'Anotações', 'Google Maps'];
-    var lines = [head.map(csvCell).join(';')];
-    all.forEach(function (l) {
-      lines.push([l.name, l.phone, l.address, l.website, l.rating, l.reviews, labels[l.pipeline] || l.pipeline, l.notes, l.maps].map(csvCell).join(';'));
-    });
-    var blob = new Blob(['\ufeff' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob); a.download = 'leads.csv';
-    document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
-  });
-
-  // ---------- eventos ----------
-  $('btnSearch').addEventListener('click', function () { doSearch(false); });
-  ['segment', 'city'].forEach(function (id) {
-    $(id).addEventListener('keydown', function (e) { if (e.key === 'Enter') doSearch(false); });
-  });
-  ['onlyNoSite', 'minReviews', 'onlyPhone'].forEach(function (id) {
-    $(id).addEventListener('change', renderResults);
-  });
-  $('filterStatus').addEventListener('change', renderSaved);
-  document.querySelectorAll('.tab').forEach(function (t) {
-    t.addEventListener('click', function () {
-      document.querySelectorAll('.tab').forEach(function (x) { x.classList.toggle('active', x === t); });
-      $('tab-results').classList.toggle('hidden', t.dataset.tab !== 'results');
-      $('tab-saved').classList.toggle('hidden', t.dataset.tab !== 'saved');
-    });
-  });
-
-  async function apiLeads(method, body) {
-    if (!currentSession) throw new Error('Entre novamente para salvar seus leads.');
-    var response = await fetch('/api/leads', {
-      method: method,
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + currentSession.access_token },
-      body: body ? JSON.stringify(body) : undefined
-    });
-    var data = await response.json().catch(function () { return {}; });
-    if (!response.ok) throw new Error(data.error || 'Não foi possível sincronizar os leads.');
-    return data;
-  }
-  async function syncLeadsFromCloud() {
-    try {
-      var data = await apiLeads('GET');
-      leads = {};
-      (data.leads || []).forEach(function (row) { leads[row.id] = row.payload; });
-      save('pl_leads', leads); renderSaved(); renderResults();
-    } catch (e) { console.error(e); setMsg('Não foi possível carregar os leads da sua conta.', true); }
-  }
-  async function persistLead(lead) {
-    save('pl_leads', leads);
-    try { await apiLeads('POST', { id: String(lead.id), payload: lead }); }
-    catch (e) { setMsg(e.message, true); }
-  }
-  async function removeLeadFromCloud(id) {
-    try { await apiLeads('DELETE', { id: String(id) }); }
-    catch (e) { setMsg(e.message, true); }
-  }
-
-  // ---------- autenticação e quota ----------
   var supabase = null;
-  var currentSession = null;
   function authMessage(text, err) { var m = $('authMsg'); m.textContent = text || ''; m.className = 'msg' + (err ? ' err' : ''); }
-  function updateQuota(remaining, limit) {
-    $('quotaCard').classList.remove('hidden');
-    $('quotaInfo').textContent = 'Pesquisas restantes: ' + remaining + ' de ' + limit;
+  function goApp() { window.location.replace(APP_URL); }
+  function lock() { $('btnLogin').disabled = true; $('btnSignup').disabled = true; $('btnGoogle').disabled = true; }
+  function configured() {
+    var c = window.APP_CONFIG;
+    return !!(c && c.SUPABASE_URL && c.SUPABASE_ANON_KEY && !/SEU-PROJETO|SUA_SUPABASE/.test(c.SUPABASE_URL + c.SUPABASE_ANON_KEY));
   }
-  function setAuthenticated(session) {
-    currentSession = session;
-    var logged = !!session;
-    $('authPanel').classList.toggle('hidden', logged);
-    $('btnLogout').classList.toggle('hidden', !logged);
-    $('quotaCard').classList.toggle('hidden', !logged);
-    $('accountTitle').textContent = logged ? 'Conta conectada' : 'Acesso ao Prospekt';
-    $('accountInfo').textContent = logged ? session.user.email : 'Entre ou crie sua conta para pesquisar.';
-    $('btnSearch').disabled = !logged;
-    if (!logged) { $('tab-results').innerHTML = '<div class="msg">Entre na sua conta para começar.</div>'; }
-    else { refreshQuota(); syncLeadsFromCloud(); }
-  }
-  async function refreshQuota() {
-    if (!currentSession) return;
-    try {
-      var r = await fetch('/api/places-search', { method: 'GET', headers: { 'Authorization': 'Bearer ' + currentSession.access_token } });
-      var d = await r.json();
-      if (r.ok) updateQuota(d.remaining, d.limit);
-    } catch (_) {}
-  }
+
   async function startAuth() {
-    if (!window.APP_CONFIG || !APP_CONFIG.SUPABASE_URL || !APP_CONFIG.SUPABASE_ANON_KEY) {
-      authMessage('Configure SUPABASE_URL e SUPABASE_ANON_KEY no arquivo config.js antes de publicar.', true);
-      $('btnLogin').disabled = true; $('btnSignup').disabled = true; $('btnGoogle').disabled = true; return;
-    }
+    if (!configured()) { authMessage('A configuração do Supabase ainda precisa ser preenchida em config.js.', true); lock(); return; }
+    if (!window.supabase) { authMessage('Não foi possível carregar o serviço de login. Atualize a página.', true); lock(); return; }
     supabase = window.supabase.createClient(APP_CONFIG.SUPABASE_URL, APP_CONFIG.SUPABASE_ANON_KEY, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } });
-    $('btnLogin').addEventListener('click', async function () {
+
+    $('authForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
       authMessage('Entrando...');
       var result = await supabase.auth.signInWithPassword({ email: $('authEmail').value.trim(), password: $('authPassword').value });
       if (result.error) return authMessage(result.error.message, true);
-      authMessage('Login realizado.'); setAuthenticated(result.data.session);
+      goApp();
     });
     $('btnSignup').addEventListener('click', async function () {
       authMessage('Criando conta...');
       var result = await supabase.auth.signUp({ email: $('authEmail').value.trim(), password: $('authPassword').value, options: { emailRedirectTo: window.location.origin } });
       if (result.error) return authMessage(result.error.message, true);
-      if (result.data.session) { authMessage('Conta criada.'); setAuthenticated(result.data.session); }
+      if (result.data.session) goApp();
       else authMessage('Conta criada. Confira seu e-mail para confirmar o cadastro e depois entre.');
     });
     $('btnGoogle').addEventListener('click', async function () {
@@ -558,12 +184,12 @@
       });
       if (result.error) authMessage('Não foi possível iniciar o login com Google: ' + result.error.message, true);
     });
-    $('btnLogout').addEventListener('click', async function () { await supabase.auth.signOut(); setAuthenticated(null); });
-    supabase.auth.onAuthStateChange(function (_event, session) { setAuthenticated(session); });
-    var result = await supabase.auth.getSession(); setAuthenticated(result.data.session);
+
+    // Já logado (ou voltando do Google / link de confirmação): vai direto para a aplicação.
+    supabase.auth.onAuthStateChange(function (event, session) { if (session && event !== 'SIGNED_OUT') goApp(); });
+    var result = await supabase.auth.getSession();
+    if (result.data.session) goApp();
   }
-  fillStatusFilter();
-  renderSaved();
   startAuth();
 })();
 </script>
