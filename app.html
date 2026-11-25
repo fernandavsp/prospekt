@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prospekt</title>
+<style>
+  :root { --text:#18233b; --muted:#75809a; --line:#e2e6f1; --accent:#5b4ce2; --bad:#c33f4b; --ok:#159b72; }
+  * { box-sizing: border-box; }
+  body { margin:0; color:var(--text); background:#f6f7fc; font:15px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; letter-spacing:-.01em; }
+  header { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; padding:14px 24px; background:linear-gradient(135deg,#171b38,#252052 55%,#4439a1); color:#fff; }
+  .brand { display:flex; align-items:center; gap:10px; font-size:22px; font-weight:800; letter-spacing:-1px; text-decoration:none; color:#fff; }
+  .brand span { color:#a69bff; }
+  .mark { display:grid; place-items:center; width:36px; height:36px; border-radius:11px; background:linear-gradient(135deg,#a69bff,#7666f3); }
+  .mark svg { width:22px; height:22px; }
+  .hright { display:flex; align-items:center; gap:12px; flex-wrap:wrap; font-size:13px; }
+  .quota { background:rgba(255,255,255,.14); padding:6px 12px; border-radius:999px; font-weight:700; }
+  .user { color:#d0d2e8; max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  main { max-width:960px; margin:0 auto; padding:24px 16px 60px; }
+  .card { background:#fff; border:1px solid #e8ebf4; border-radius:18px; padding:20px; box-shadow:0 10px 30px rgba(29,37,76,.06); }
+  form.search { display:grid; grid-template-columns:1fr 1fr auto; gap:12px; align-items:end; }
+  label { display:block; font-size:13px; font-weight:700; color:#4f5a75; }
+  input, select, textarea { display:block; width:100%; margin-top:6px; font:inherit; color:var(--text); border:1px solid #dfe4ef; background:#fbfcff; border-radius:10px; padding:11px 13px; outline:none; }
+  input:focus, select:focus, textarea:focus { border-color:#8a7df1; box-shadow:0 0 0 3px rgba(91,76,226,.13); background:#fff; }
+  textarea { resize:vertical; min-height:60px; }
+  button { font:inherit; font-weight:700; cursor:pointer; border-radius:10px; border:1px solid #e0e4ef; background:#fff; color:#34405c; padding:11px 16px; }
+  button:hover:not(:disabled) { border-color:#a69cf5; }
+  button.primary { background:linear-gradient(135deg,#6557e8,#4f40ce); border-color:#5a4cdb; color:#fff; }
+  button.danger { color:var(--bad); }
+  button.small { padding:7px 12px; font-size:13px; }
+  button:disabled { opacity:.55; cursor:not-allowed; }
+  .msg { min-height:22px; margin:14px 2px 0; font-size:14px; color:var(--muted); }
+  .msg.err { color:var(--bad); }
+  .tabs { display:flex; gap:8px; margin:22px 0 14px; }
+  .tab { border-radius:999px; padding:8px 16px; }
+  .tab.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .list { display:grid; gap:12px; }
+  .item { background:#fff; border:1px solid #e8ebf4; border-radius:14px; padding:16px; }
+  .item h3 { margin:0 0 4px; font-size:16px; }
+  .meta { color:var(--muted); font-size:14px; }
+  .row { display:flex; flex-wrap:wrap; gap:8px 16px; margin-top:8px; font-size:14px; }
+  .row a { color:var(--accent); text-decoration:none; font-weight:600; }
+  .actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; align-items:center; }
+  .lead-grid { display:grid; grid-template-columns:200px 1fr; gap:12px; margin-top:12px; }
+  .empty { text-align:center; color:var(--muted); padding:36px 10px; }
+  .saved-note { font-size:12px; color:var(--ok); }
+  .more { margin-top:14px; text-align:center; }
+  @media (max-width:700px) { form.search { grid-template-columns:1fr; } .lead-grid { grid-template-columns:1fr; } header { padding:12px 16px; } }
+</style>
+</head>
+<body>
+<header>
+  <a class="brand" href="/app.html"><span class="mark"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M14 5a9 9 0 1 0 5.8 15.9L26 27l2-2-6.1-6.2A9 9 0 0 0 14 5Zm0 3a6 6 0 1 1 0 12 6 6 0 0 1 0-12Z" fill="#fff"/><path d="m11 14 2 2 4-5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>prospekt<span>.</span></a>
+  <div class="hright">
+    <span class="quota" id="quota">Pesquisas: ...</span>
+    <span class="user" id="userEmail"></span>
+    <button class="small" id="btnLogout" type="button">Sair</button>
+  </div>
+</header>
+
+<main>
+  <section class="card">
+    <form class="search" id="searchForm">
+      <label>Segmento
+        <input id="segment" placeholder="ex.: salão de beleza" maxlength="80" required>
+      </label>
+      <label>Cidade / região
+        <input id="city" placeholder="ex.: Duque de Caxias, RJ" maxlength="80" required>
+      </label>
+      <button class="primary" id="btnSearch" type="submit">Pesquisar</button>
+    </form>
+    <div class="msg" id="msg" role="status" aria-live="polite"></div>
+  </section>
+
+  <div class="tabs">
+    <button class="tab active" id="tabResults" type="button">Resultados</button>
+    <button class="tab" id="tabLeads" type="button">Meus leads (<span id="leadCount">0</span>)</button>
+  </div>
+
+  <section id="viewResults"><div class="empty">Faça uma pesquisa para ver os negócios aqui.</div></section>
+  <section id="viewLeads" hidden></section>
+</main>
+
+<script src="/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.0/dist/umd/supabase.js"></script>
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  var STATUSES = ['Novo', 'Contatado', 'Em negociação', 'Fechado', 'Descartado'];
+  var supabase = null;
+  var leads = {};            // id -> { id, payload }
+  var results = [];          // lugares da última pesquisa
+  var nextPageToken = null;
+  var lastQuery = '';
+  var saveTimers = {};
+
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function safeUrl(u) { try { var x = new URL(u); return (x.protocol === 'http:' || x.protocol === 'https:') ? x.href : ''; } catch (e) { return ''; } }
+  function setMsg(t, err) { var m = $('msg'); m.textContent = t || ''; m.className = 'msg' + (err ? ' err' : ''); }
+  function setQuota(remaining, limit) { if (remaining == null) return; $('quota').textContent = 'Pesquisas restantes: ' + remaining + (limit ? ' de ' + limit : ''); }
+
+  async function token() {
+    var r = await supabase.auth.getSession();
+    if (!r.data.session) { window.location.replace('/'); throw new Error('Sem sessão'); }
+    return r.data.session.access_token;
+  }
+  async function api(path, method, body) {
+    var t = await token();
+    var opts = { method: method, headers: { 'Authorization': 'Bearer ' + t } };
+    if (body) { opts.headers['Content-Type'] = 'application/json'; opts.body = JSON.stringify(body); }
+    var res = await fetch(path, opts);
+    var data = await res.json().catch(function () { return {}; });
+    if (res.status === 401) { window.location.replace('/'); throw new Error('Sessão expirada'); }
+    if (!res.ok) { var e = new Error(data.error || 'Erro ' + res.status); e.data = data; throw e; }
+    return data;
+  }
+
+  /* ---------- leads ---------- */
+  function leadCount() { $('leadCount').textContent = Object.keys(leads).length; }
+  async function loadLeads() {
+    try {
+      var data = await api('/api/leads', 'GET');
+      leads = {};
+      (data.leads || []).forEach(function (l) { leads[l.id] = l; });
+      leadCount(); renderLeads(); renderResults();
+    } catch (e) { setMsg('Não foi possível carregar seus leads: ' + e.message, true); }
+  }
+  async function saveLead(place) {
+    var payload = { name: place.name, address: place.address, phone: place.phone, website: place.website, mapsUrl: place.mapsUrl, rating: place.rating, ratingCount: place.ratingCount, status: 'Novo', notes: '', savedAt: new Date().toISOString() };
+    try {
+      var data = await api('/api/leads', 'POST', { id: place.id, payload: payload });
+      leads[data.lead.id] = data.lead;
+      leadCount(); renderResults(); renderLeads();
+    } catch (e) { setMsg('Não foi possível salvar o lead: ' + e.message, true); }
+  }
+  function scheduleUpdate(id) {
+    clearTimeout(saveTimers[id]);
+    saveTimers[id] = setTimeout(async function () {
+      var note = document.querySelector('[data-note-for="' + CSS.escape(id) + '"]');
+      try {
+        await api('/api/leads', 'POST', { id: id, payload: leads[id].payload });
+        if (note) { note.textContent = 'Salvo'; setTimeout(function () { note.textContent = ''; }, 1500); }
+      } catch (e) { setMsg('Não foi possível atualizar o lead: ' + e.message, true); }
+    }, 600);
+  }
+  async function removeLead(id) {
+    if (!confirm('Remover este lead?')) return;
+    try {
+      await api('/api/leads', 'DELETE', { id: id });
+      delete leads[id];
+      leadCount(); renderLeads(); renderResults();
+    } catch (e) { setMsg('Não foi possível remover: ' + e.message, true); }
+  }
+
+  /* ---------- render ---------- */
+  function renderResults() {
+    var box = $('viewResults');
+    if (!results.length) { box.innerHTML = '<div class="empty">Faça uma pesquisa para ver os negócios aqui.</div>'; return; }
+    var html = '<div class="list">' + results.map(function (p) {
+      var saved = !!leads[p.id];
+      var site = safeUrl(p.website), maps = safeUrl(p.mapsUrl);
+      return '<article class="item"><h3>' + esc(p.name) + '</h3><div class="meta">' + esc(p.address) + '</div><div class="row">' +
+        (p.phone ? '<span>📞 ' + esc(p.phone) + '</span>' : '') +
+        (p.rating ? '<span>⭐ ' + esc(p.rating) + (p.ratingCount ? ' (' + esc(p.ratingCount) + ')' : '') + '</span>' : '') +
+        (site ? '<a href="' + esc(site) + '" target="_blank" rel="noopener noreferrer">Site</a>' : '<span class="meta">Sem site</span>') +
+        (maps ? '<a href="' + esc(maps) + '" target="_blank" rel="noopener noreferrer">Ver no Maps</a>' : '') +
+        '</div><div class="actions"><button class="small ' + (saved ? '' : 'primary') + '" data-save="' + esc(p.id) + '"' + (saved ? ' disabled' : '') + '>' + (saved ? 'Salvo ✓' : 'Salvar lead') + '</button></div></article>';
+    }).join('') + '</div>';
+    if (nextPageToken) html += '<div class="more"><button id="btnMore" type="button">Carregar mais 20 (usa 1 pesquisa)</button></div>';
+    box.innerHTML = html;
+  }
+  function renderLeads() {
+    var box = $('viewLeads');
+    var arr = Object.keys(leads).map(function (k) { return leads[k]; }).sort(function (a, b) { return String(b.updated_at || '').localeCompare(String(a.updated_at || '')); });
+    if (!arr.length) { box.innerHTML = '<div class="empty">Nenhum lead salvo ainda. Salve negócios a partir dos resultados.</div>'; return; }
+    box.innerHTML = '<div class="list">' + arr.map(function (l) {
+      var p = l.payload || {}, site = safeUrl(p.website), maps = safeUrl(p.mapsUrl);
+      var opts = STATUSES.map(function (s) { return '<option' + (p.status === s ? ' selected' : '') + '>' + esc(s) + '</option>'; }).join('');
+      return '<article class="item"><h3>' + esc(p.name) + '</h3><div class="meta">' + esc(p.address) + '</div><div class="row">' +
+        (p.phone ? '<span>📞 ' + esc(p.phone) + '</span>' : '') +
+        (site ? '<a href="' + esc(site) + '" target="_blank" rel="noopener noreferrer">Site</a>' : '') +
+        (maps ? '<a href="' + esc(maps) + '" target="_blank" rel="noopener noreferrer">Ver no Maps</a>' : '') +
+        '</div><div class="lead-grid"><label>Status<select data-status="' + esc(l.id) + '">' + opts + '</select></label>' +
+        '<label>Anotações<textarea data-notes="' + esc(l.id) + '" maxlength="2000" placeholder="Contato feito, próximos passos...">' + esc(p.notes || '') + '</textarea></label></div>' +
+        '<div class="actions"><button class="small danger" data-remove="' + esc(l.id) + '">Remover</button><span class="saved-note" data-note-for="' + esc(l.id) + '"></span></div></article>';
+    }).join('') + '</div>';
+  }
+  function showTab(name) {
+    var r = name === 'results';
+    $('viewResults').hidden = !r; $('viewLeads').hidden = r;
+    $('tabResults').classList.toggle('active', r); $('tabLeads').classList.toggle('active', !r);
+  }
+
+  /* ---------- busca ---------- */
+  function mapPlace(p) {
+    return { id: p.id, name: (p.displayName && p.displayName.text) || 'Sem nome', address: p.formattedAddress || '', phone: p.nationalPhoneNumber || '', website: p.websiteUri || '', mapsUrl: p.googleMapsUri || '', rating: p.rating || null, ratingCount: p.userRatingCount || null };
+  }
+  async function search(more) {
+    var segment = $('segment').value.trim(), city = $('city').value.trim();
+    if (!more && (!segment || !city)) { setMsg('Informe o segmento e a cidade.', true); return; }
+    var query = more ? lastQuery : segment + ' em ' + city;
+    $('btnSearch').disabled = true;
+    var btnMore = $('btnMore'); if (btnMore) btnMore.disabled = true;
+    setMsg('Pesquisando...');
+    try {
+      var data = await api('/api/places-search', 'POST', { textQuery: query, pageToken: more ? nextPageToken : null });
+      var found = (data.places || []).map(mapPlace);
+      if (more) results = results.concat(found); else results = found;
+      lastQuery = query; nextPageToken = data.nextPageToken || null;
+      setQuota(data.remaining, data.limit);
+      setMsg(found.length ? '' : 'Nenhum resultado encontrado para essa pesquisa.');
+      renderResults(); showTab('results');
+    } catch (e) {
+      if (e.data && e.data.remaining != null) setQuota(e.data.remaining, e.data.limit);
+      setMsg(e.message, true);
+      renderResults();
+    } finally { $('btnSearch').disabled = false; }
+  }
+
+  /* ---------- eventos ---------- */
+  function bind() {
+    $('searchForm').addEventListener('submit', function (e) { e.preventDefault(); search(false); });
+    $('tabResults').addEventListener('click', function () { showTab('results'); });
+    $('tabLeads').addEventListener('click', function () { showTab('leads'); });
+    $('btnLogout').addEventListener('click', async function () { await supabase.auth.signOut(); window.location.replace('/'); });
+    $('viewResults').addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      if (b.id === 'btnMore') return search(true);
+      var id = b.getAttribute('data-save');
+      if (id) { var p = results.filter(function (x) { return x.id === id; })[0]; if (p) { b.disabled = true; saveLead(p); } }
+    });
+    $('viewLeads').addEventListener('click', function (e) {
+      var b = e.target.closest('button[data-remove]'); if (b) removeLead(b.getAttribute('data-remove'));
+    });
+    $('viewLeads').addEventListener('input', function (e) {
+      var id = e.target.getAttribute('data-notes'); if (!id || !leads[id]) return;
+      leads[id].payload.notes = e.target.value; scheduleUpdate(id);
+    });
+    $('viewLeads').addEventListener('change', function (e) {
+      var id = e.target.getAttribute('data-status'); if (!id || !leads[id]) return;
+      leads[id].payload.status = e.target.value; scheduleUpdate(id);
+    });
+  }
+
+  async function init() {
+    var c = window.APP_CONFIG;
+    if (!(c && c.SUPABASE_URL && c.SUPABASE_ANON_KEY) || !window.supabase) { setMsg('Configuração do Supabase ausente em config.js.', true); return; }
+    supabase = window.supabase.createClient(c.SUPABASE_URL, c.SUPABASE_ANON_KEY, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } });
+    var r = await supabase.auth.getSession();
+    if (!r.data.session) { window.location.replace('/'); return; }
+    $('userEmail').textContent = r.data.session.user.email || '';
+    supabase.auth.onAuthStateChange(function (ev, s) { if (!s) window.location.replace('/'); });
+    bind();
+    try { var q = await api('/api/places-search', 'GET'); setQuota(q.remaining, q.limit); } catch (e) { $('quota').textContent = 'Pesquisas: indisponível'; }
+    loadLeads();
+  }
+  init();
+})();
+</script>
+</body>
+</html>

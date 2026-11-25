@@ -12,11 +12,13 @@ function json(res, status, body) {
   res.setHeader('Cache-Control', 'no-store');
   return res.status(status).json(body);
 }
+
 function adminClient() {
   return createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, {
     auth: { autoRefreshToken: false, persistSession: false }
   });
 }
+
 async function authenticate(req, res) {
   const header = req.headers.authorization || '';
   const token = header.startsWith('Bearer ') ? header.slice(7) : '';
@@ -26,6 +28,7 @@ async function authenticate(req, res) {
   if (error || !data.user) { json(res, 401, { error: 'Sessão inválida ou expirada. Entre novamente.' }); return null; }
   return { supabase, user: data.user };
 }
+
 module.exports = async (req, res) => {
   if (!['GET', 'POST'].includes(req.method)) return json(res, 405, { error: 'Método não permitido.' });
   try {
@@ -49,11 +52,13 @@ module.exports = async (req, res) => {
     if (!textQuery || textQuery.length > 180) return json(res, 400, { error: 'Informe um segmento e uma cidade válidos.', remaining: quota.remaining, limit: LIMIT });
     const body = { textQuery, languageCode: 'pt-BR', regionCode: 'BR', pageSize: 20 };
     if (pageToken) body.pageToken = pageToken;
+
     const upstream = await fetch('https://places.googleapis.com/v1/places:searchText', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-Goog-Api-Key': process.env.GOOGLE_PLACES_API_KEY, 'X-Goog-FieldMask': FIELDS },
       body: JSON.stringify(body)
     });
+    
     const data = await upstream.json().catch(() => ({}));
     if (!upstream.ok) {
       console.error('Google Places error', upstream.status, data?.error?.message);

@@ -1,5 +1,6 @@
 const { createClient } = require('@supabase/supabase-js');
 function send(res, status, body) { res.setHeader('Content-Type', 'application/json; charset=utf-8'); res.setHeader('Cache-Control', 'no-store'); return res.status(status).json(body); }
+
 module.exports = async (req, res) => {
   if (!['GET', 'POST', 'PATCH', 'DELETE'].includes(req.method)) return send(res, 405, { error: 'Método não permitido.' });
   const token = (req.headers.authorization || '').startsWith('Bearer ') ? req.headers.authorization.slice(7) : '';
