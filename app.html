@@ -22,7 +22,8 @@
   label { display:block; font-size:13px; font-weight:700; color:#4f5a75; }
   input, select, textarea { display:block; width:100%; margin-top:6px; font:inherit; color:var(--text); border:1px solid #dfe4ef; background:#fbfcff; border-radius:10px; padding:11px 13px; outline:none; }
   input:focus, select:focus, textarea:focus { border-color:#8a7df1; box-shadow:0 0 0 3px rgba(91,76,226,.13); background:#fff; }
-  textarea { resize:vertical; min-height:60px; }
+  textarea { resize:vertical; min-height:60px; max-width:100%; }
+  .lead-grid label { min-width:0; }
   button { font:inherit; font-weight:700; cursor:pointer; border-radius:10px; border:1px solid #e0e4ef; background:#fff; color:#34405c; padding:11px 16px; }
   button:hover:not(:disabled) { border-color:#a69cf5; }
   button.primary { background:linear-gradient(135deg,#6557e8,#4f40ce); border-color:#5a4cdb; color:#fff; }
@@ -41,11 +42,12 @@
   .row { display:flex; flex-wrap:wrap; gap:8px 16px; margin-top:8px; font-size:14px; }
   .row a { color:var(--accent); text-decoration:none; font-weight:600; }
   .actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; align-items:center; }
-  .lead-grid { display:grid; grid-template-columns:200px 1fr; gap:12px; margin-top:12px; }
+  .lead-grid { display:grid; grid-template-columns:200px minmax(0,1fr); gap:12px; margin-top:12px; }
+  .item { overflow:hidden; }
   .empty { text-align:center; color:var(--muted); padding:36px 10px; }
   .saved-note { font-size:12px; color:var(--ok); }
   .more { margin-top:14px; text-align:center; }
-  @media (max-width:700px) { form.search { grid-template-columns:1fr; } .lead-grid { grid-template-columns:1fr; } header { padding:12px 16px; } }
+  @media (max-width:700px) { form.search { grid-template-columns:1fr; } .lead-grid { grid-template-columns:minmax(0,1fr); } header { padding:12px 16px; } }
 </style>
 </head>
 <body>
